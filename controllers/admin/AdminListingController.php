@@ -1,38 +1,25 @@
 <?php
 
-
-//include_once(dirname(__FILE__).'/../../classes/team.php');
-//include_once(dirname(__FILE__).'/../../team.php');
-
+include_once(dirname(__FILE__).'/../../classes/listing.php');
 
 class AdminListingController extends AdminController 
 {
-    /** @var boolean Automatically join language table if true */
-	public $lang = false;
-
-    /** @var string ORDER BY clause determined by field/arrows in list header */
-	protected $_orderBy;
-
-	/** @var string Order way (ASC, DESC) determined by arrows in list header */
-	protected $_orderWay;
+	public $lang = true;
     
-    /** @var array list of available actions for each list row - default actions are view, edit, delete, duplicate */
 	protected $actions_available = array('view', 'edit', 'delete', 'duplicate');
+   
+	protected $position_identifier = 'id_listing';
     
-    /** @var string	identifier to use for changing positions in lists (can be omitted if positions cannot be changed) */
-	protected $position_identifier;
-	protected $position_group_identifier;
-    
-    /** @var string module */
     protected $module;
-
 
     public function __construct() 
     {
+        
         $this->table = 'listing'; 
         $this->className = 'listingObject';     
         $this->lang = true;
         $this->explicitSelect = true;
+        $this->list_no_link = true;
         //$this->shop = true;
 		//$this->multilang_shop = true;
             
@@ -49,11 +36,13 @@ class AdminListingController extends AdminController
         $this->multishop_context = Shop::CONTEXT_ALL;
         
         //remove dupes using a group
-        $this->_group = 'GROUP BY id_team';
+        $this->_group = 'GROUP BY id_listing';
         
         // Generat action on list   
         $this->addRowAction('edit');
         $this->addRowAction('delete');
+        
+        $this->_defaultOrderBy = 'position';
         
         // This adds a multiple deletion button
         $this->bulk_actions = array(
@@ -65,20 +54,88 @@ class AdminListingController extends AdminController
         
         //and define the field to display in the admin table
         $this->fields_list = array(
-            'id_team' => array(
-                'title' => $this->l('Id Team'),
+            'id_listing' => array(
+                'title' => $this->l('Id Listing'),
                 'align' => 'left',
                 'width' => '100%',
-                'name'  => 'id_team'
+                'name'  => 'id_listing'
             ),
-            'name' => array(
-                'title' => $this->l('Name'),
-                'align' => 'left',
-                'width' => '100%',
-                'name'  => 'name'
+            'position' => array(
+                'title' => $this->l('Position'),
+                'filter_key' => 'a!position',
+                'align' => 'center',
+                'class' => 'fixed-width-sm',
+                'position' => 'position',
             ),
         );
         parent::__construct(); 
+    }
+    
+    
+    
+    /**
+     * Update positions via ajax
+     * --
+     */
+    public function ajaxProcessUpdatePositions()
+    {   
+        $way = (int) Tools::getValue('way');
+        $id_press_item = (int) Tools::getValue('id');
+        $positions = Tools::getValue($this->table);
+        
+        foreach ($positions as $position => $value) {
+            
+            $pos = explode('_', $value);
+            
+            if (isset($pos[2]) && (int) $pos[2] === $id_press_item) {
+                
+                if ($press = new listingObject((int) $pos[2])) {
+                    if (isset($position) && $press->updatePosition($way, $position)) {
+                        echo 'ok position ' . (int) $position . ' for press item ' . (int) $pos[1] . '\r\n';
+                    } else {
+                        echo '{"hasError" : true, "errors" : "Can not update press item ' . (int) $id_press_item .' to position ' . (int) $position . ' "}';
+                    }
+                } else {
+                    echo '{"hasError" : true, "errors" : "This press item (' .(int) $id_press_item . ') can t be loaded"}';
+                }
+                break;
+            }
+        }
+        
+        $this->afterSort();
+    }
+    
+    
+    
+    /**
+     * Fix the sort order, the numbers were not contiguous
+     * --
+     */
+    public function afterSort()
+    {
+        $q = ' select * from ps_listing order by position ';
+        $r =  DB::getInstance()->executeS($q);
+        
+        for($i=0;$i<count($r);$i++){
+            
+            if(isset($r[$i+1])) {
+                
+                $current_position = $r[$i]['position'];
+                $next_position = $r[$i+1]['position'];
+                
+                if($next_position !== ($current_position+1) ){
+                    $r[$i+1]['position'] = $current_position + 1;
+                }
+                
+            }else{ 
+                
+            }
+        }
+        foreach($r as $x){
+            $q = ' update ' . _DB_PREFIX_ . 'listing set position = "'.$x['position'].'" where id_listing = "'.$x['id_listing'].'" ';
+            if (!Db::getInstance()->execute($q))
+                p(array('error!', $q));
+        }
     }
     
     
@@ -101,9 +158,8 @@ class AdminListingController extends AdminController
     public function renderForm()
     { 
         
-                $this->multishop_context = -1;
+        $this->multishop_context = -1;
         $this->multishop_context_group = true;
-        
         
         $this->fields_form = array
         (
@@ -165,13 +221,12 @@ class AdminListingController extends AdminController
             )  
         );
         
-        
-//        if (Shop::isFeatureActive()){
-//            $this->fields_form['input'][] = array(
-//                'type' => 'shop',
-//                'label' => $this->l('Shop association'),
-//                'name' => 'checkBoxShopAsso');
-//        }
+        //        if (Shop::isFeatureActive()){
+        //            $this->fields_form['input'][] = array(
+        //                'type' => 'shop',
+        //                'label' => $this->l('Shop association'),
+        //                'name' => 'checkBoxShopAsso');
+        //        }
         
         return parent::renderForm(); 
     }
@@ -184,7 +239,12 @@ class AdminListingController extends AdminController
      * @return void
      */
     public function postProcess(){
-        if (!$this->redirect_after){
+        
+        if(isset($_POST['action'])  && $_POST['action'] == 'updatePositions'){
+             parent::postProcess();
+        }
+
+        else if (!$this->redirect_after){
             parent::postProcess();
         }
     }
@@ -197,7 +257,4 @@ class AdminListingController extends AdminController
     public function processSave(){
         return parent::processSave();
     }
-    
-    
-    
 }
