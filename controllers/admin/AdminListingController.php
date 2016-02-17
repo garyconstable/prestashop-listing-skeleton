@@ -36,8 +36,9 @@ class AdminListingController extends AdminController
         //        // http://doc.prestashop.com/display/PS15/Specifics+of+multistore+module+development
         //        $this->multishop_context = Shop::CONTEXT_SHOP;
         
-        // $this->multishop_context = Shop::CONTEXT_SHOP;
         
+        // $this->multishop_context = Shop::CONTEXT_SHOP;
+        $this->multishop_context = Shop::CONTEXT_ALL;
         
         //remove dupes using a group
         $this->_group = 'GROUP BY id_listing';
