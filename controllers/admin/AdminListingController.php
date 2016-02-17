@@ -171,23 +171,16 @@ class AdminListingController extends AdminController
             'input' => array(
                 array(
                     'type' => 'text',
-                    'label' => $this->l("Name")." :",
-                    'name' => 'name',
+                    'label' => $this->l("Title")." :",
+                    'name' => 'title',
                     'size' => 40,
                     'required' => true,
-                ),
-                array(
-                    'type' => 'text',
-                    'label' => $this->l("Role")." :",
-                    'name' => 'role',
-                    'size' => 40,
-                    'required' => true,
-                    'lang' => true
+                    'lang' => true,
                 ),
                 array(
                     'type' => 'textarea',
-                    'label' => $this->l("Intro")." :",
-                    'name' => 'intro',
+                    'label' => $this->l("Description")." :",
+                    'name' => 'description',
                     'size' => 40,
                     'required' => true,
                     'lang' => true,
@@ -195,26 +188,7 @@ class AdminListingController extends AdminController
                     'rows' => 10,
                     'class' => 'rte',
                     'autoload_rte' => true,
-                ),
-                array(
-                    'type' => 'textarea',
-                    'label' => $this->l("About me")." :",
-                    'name' => 'about_me',
-                    'size' => 40,
-                    'required' => true,
-                    'lang' => true,
-                    'cols' => 40,
-                    'rows' => 10,
-                    'class' => 'rte',
-                    'autoload_rte' => true,
-                ),
-                array(
-                    'type' => 'text',
-                    'label' => $this->l("Img")." :",
-                    'name' => 'img',
-                    'size' => 40,
-                    'required' => true,
-                ),
+                )
             ),
             'submit' => array(
                 'title' => $this->l('Save')
@@ -238,15 +212,17 @@ class AdminListingController extends AdminController
      *
      * @return void
      */
-    public function postProcess(){
+    public function postProcess()
+    {
+        parent::postProcess();
         
-        if(isset($_POST['action'])  && $_POST['action'] == 'updatePositions'){
-             parent::postProcess();
-        }
-
-        else if (!$this->redirect_after){
-            parent::postProcess();
-        }
+        //        if(isset($_POST['action'])  && $_POST['action'] == 'updatePositions'){
+        //             parent::postProcess();
+        //        }
+        //
+        //        else if (!$this->redirect_after){
+        //            parent::postProcess();
+        //        }
     }
     
     

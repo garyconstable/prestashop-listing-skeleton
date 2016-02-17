@@ -32,7 +32,7 @@ $sql[] =
 `position` int(11) NOT NULL,
 `active` tinyint(1) NOT NULL,
 `date_add` datetime DEFAULT NULL,
-`date_update` datetime DEFAULT NULL,
+`date_upd` datetime DEFAULT NULL,
 PRIMARY KEY  (`id_listing`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 

@@ -9,6 +9,8 @@ class listingObject extends ObjectModel
     public $description;
     public $active;
     public $position;
+    public $date_add;
+    public $date_upd;
     
     
     
@@ -18,10 +20,12 @@ class listingObject extends ObjectModel
         'multilang' => true,
 		'multilang_shop' => true,
         'fields' => array(
-            'title' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'lang' => true, 'shop' => true),
-            'description' => array('type' => self::TYPE_HTML, 'validate' => 'isString', 'size' => 3999999999999, 'lang' => true, 'shop' => true),
-            'active' => array('type' => self::TYPE_INT ),
-            'position' => array('type' => self::TYPE_INT ),
+            'title'         => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'lang' => true, 'shop' => true),
+            'description'   => array('type' => self::TYPE_HTML, 'validate' => 'isString', 'size' => 3999999999999, 'lang' => true, 'shop' => true),
+            'active'        => array('type' => self::TYPE_DATE ),
+            'position'      => array('type' => self::TYPE_INT ),
+            'date_add'      => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
+			'date_upd'      => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
         )
     );
     
