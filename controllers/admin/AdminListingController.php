@@ -20,10 +20,13 @@ class AdminListingController extends AdminController
         $this->lang = true;
         $this->explicitSelect = true;
         $this->list_no_link = true;
-        //$this->shop = true;
-		//$this->multilang_shop = true;
-            
         $this->bootstrap = true;
+        
+        
+       
+        //      $this->shop = true;
+        //		$this->multilang_shop = true; 
+        //      $this->multishop_context = Shop::CONTEXT_ALL;
         
         //        //multistore context
         //        if (Tools::getIsset('id_' . $this->table) || Tools::getIsset('add' . $this->table)) {
@@ -33,7 +36,8 @@ class AdminListingController extends AdminController
         //        // http://doc.prestashop.com/display/PS15/Specifics+of+multistore+module+development
         //        $this->multishop_context = Shop::CONTEXT_SHOP;
         
-        $this->multishop_context = Shop::CONTEXT_ALL;
+        // $this->multishop_context = Shop::CONTEXT_SHOP;
+        
         
         //remove dupes using a group
         $this->_group = 'GROUP BY id_listing';

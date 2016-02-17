@@ -20,8 +20,10 @@ class listingObject extends ObjectModel
         'multilang' => true,
 		'multilang_shop' => true,
         'fields' => array(
+            //lang fields
             'title'         => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'lang' => true, 'shop' => true),
             'description'   => array('type' => self::TYPE_HTML, 'validate' => 'isString', 'size' => 3999999999999, 'lang' => true, 'shop' => true),
+            //non lang fields
             'active'        => array('type' => self::TYPE_DATE ),
             'position'      => array('type' => self::TYPE_INT ),
             'date_add'      => array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
