@@ -24,16 +24,29 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-/**
-* In some cases you should not drop the tables.
-* Maybe the merchant will just try to reset the module
-* but does not want to loose all of the data associated to the module.
-*/
+require_once(_PS_CLASS_DIR_.'shop/Shop.php');
 
-$sql = array();
-
-foreach ($sql as $query) {
-    if (Db::getInstance()->execute($query) == false) {
-        return false;
-    }
+class ListingShop extends ShopCore
+{
+    /**
+     * Define the assoc shop tables
+     * --
+     * @var type 
+     */
+    protected static $listing_shop_tables = array(
+        'listing' => array('type' => 'shop')
+    );
+    
+    
+    
+    /**
+     * Assoc the tables when it comes to sav ethe entry
+     * --
+     */
+	public static function addListingAssoTables()
+	{
+        foreach (self::$listing_shop_tables as $key => $val){
+            ShopCore::$asso_tables[$key] = $val;
+        }
+	}
 }

@@ -24,16 +24,30 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-/**
-* In some cases you should not drop the tables.
-* Maybe the merchant will just try to reset the module
-* but does not want to loose all of the data associated to the module.
-*/
-
-$sql = array();
-
-foreach ($sql as $query) {
-    if (Db::getInstance()->execute($query) == false) {
-        return false;
+class ListingDefaultModuleFrontController extends ModuleFrontController
+{  
+    /**
+     * 
+     * --
+     */
+    public function __construct()
+    {
+        parent::__construct();
     }
+    
+    /**
+     * 
+     * --
+	 * @see FrontController::initContent()
+	 */
+	public function initContent()
+	{
+		parent::initContent();
+
+		$this->context->smarty->assign(array(
+			'listingTemplateVar' => 'Hello world',
+		));
+
+		$this->setTemplate('default.tpl');
+	}    
 }

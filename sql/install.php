@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2014 PrestaShop SA
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -40,11 +40,17 @@ $sql[] =
 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'listing_lang` (
   `id_listing` int(10) unsigned NOT NULL,
   `id_lang` int(11) unsigned NOT NULL,
-  `id_shop` int(11) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text,
-  PRIMARY KEY (`id_listing`,`id_lang`,`id_shop`)
+  PRIMARY KEY (`id_listing`,`id_lang`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
+$sql[] = 
+'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'listing_shop` (
+  `id_listing` int(10) unsigned NOT NULL,
+  `id_shop` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id_listing`,`id_shop`)
+) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8;';
 
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {

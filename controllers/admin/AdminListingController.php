@@ -1,20 +1,55 @@
 <?php
+/**
+* 2007-2016 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2014 PrestaShop SA
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*/
+
+
 
 include_once(dirname(__FILE__).'/../../classes/listing.php');
 
+
+
 class AdminListingController extends AdminController 
 {
+    /**
+     * Class vars
+     * --
+     * @var type 
+     */
 	public $lang = true;
-    
-	protected $actions_available = array('view', 'edit', 'delete', 'duplicate');
-   
 	protected $position_identifier = 'id_listing';
-    
     protected $module;
-
+    
+    
+    
+    /**
+     * Admin module constructore
+     * --
+     */
     public function __construct() 
     {
-        
+        //set module vars
         $this->table = 'listing'; 
         $this->className = 'listingObject';     
         $this->lang = true;
@@ -22,34 +57,20 @@ class AdminListingController extends AdminController
         $this->list_no_link = true;
         $this->bootstrap = true;
         
-        
-       
-        //      $this->shop = true;
-        //		$this->multilang_shop = true; 
-        //      $this->multishop_context = Shop::CONTEXT_ALL;
-        
-        //        //multistore context
-        //        if (Tools::getIsset('id_' . $this->table) || Tools::getIsset('add' . $this->table)) {
+        //        $this->context = Context::getContext();
+        //        
+        //        //set multistore context
+        //        if (Tools::getIsset('id_' . $this->table) || Tools::getIsset('submitAdd' . $this->table)) {
         //            $this->multishop_context = Shop::CONTEXT_ALL;
         //        }
-        //        
-        //        // http://doc.prestashop.com/display/PS15/Specifics+of+multistore+module+development
-        //        $this->multishop_context = Shop::CONTEXT_SHOP;
-        
-        
-        // $this->multishop_context = Shop::CONTEXT_SHOP;
-        $this->multishop_context = Shop::CONTEXT_ALL;
-        
-        //remove dupes using a group
-        $this->_group = 'GROUP BY id_listing';
-        
-        // Generat action on list   
+       
+        //row actions
         $this->addRowAction('edit');
         $this->addRowAction('delete');
         
+        //list query sql params
+        $this->_group = 'GROUP BY id_listing';
         $this->_defaultOrderBy = 'position';
-        
-        // This adds a multiple deletion button
         $this->bulk_actions = array(
             'delete' => array(
                 'text' => $this->l('Delete selected'),
@@ -57,13 +78,17 @@ class AdminListingController extends AdminController
             )
         );
         
-        //and define the field to display in the admin table
+        //list fields
         $this->fields_list = array(
             'id_listing' => array(
                 'title' => $this->l('Id Listing'),
                 'align' => 'left',
-                'width' => '100%',
                 'name'  => 'id_listing'
+            ),
+            'title' => array(
+                'title' => $this->l('Title'),
+                'align' => 'left',
+                'name'  => 'title'
             ),
             'position' => array(
                 'title' => $this->l('Position'),
@@ -162,10 +187,6 @@ class AdminListingController extends AdminController
      */
     public function renderForm()
     { 
-        
-        $this->multishop_context = -1;
-        $this->multishop_context_group = true;
-        
         $this->fields_form = array
         (
             'tinymce' => true,
@@ -197,16 +218,20 @@ class AdminListingController extends AdminController
             ),
             'submit' => array(
                 'title' => $this->l('Save')
-            )  
+            )
         );
         
-        //        if (Shop::isFeatureActive()){
-        //            $this->fields_form['input'][] = array(
-        //                'type' => 'shop',
-        //                'label' => $this->l('Shop association'),
-        //                'name' => 'checkBoxShopAsso');
-        //        }
         
+        if (Shop::isFeatureActive()) 
+        {
+			$this->fields_form['input'][] = array(
+                'type' => 'shop',
+                'label' => $this->l('Shop association'),
+                'name' => 'checkBoxShopAsso',
+                //'values' => Shop::getTree()
+            );
+		}
+
         return parent::renderForm(); 
     }
     

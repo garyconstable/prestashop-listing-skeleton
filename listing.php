@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2015 PrestaShop
+* 2007-2016 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,9 +18,9 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2015 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2014 PrestaShop SA
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
@@ -200,19 +200,6 @@ class Listing extends Module
                             )
                         ),
                     ),
-                    array(
-                        'col' => 3,
-                        'type' => 'text',
-                        'prefix' => '<i class="icon icon-envelope"></i>',
-                        'desc' => $this->l('Enter a valid email address'),
-                        'name' => 'LISTING_ACCOUNT_EMAIL',
-                        'label' => $this->l('Email'),
-                    ),
-                    array(
-                        'type' => 'password',
-                        'name' => 'LISTING_ACCOUNT_PASSWORD',
-                        'label' => $this->l('Password'),
-                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -228,8 +215,6 @@ class Listing extends Module
     {
         return array(
             'LISTING_LIVE_MODE' => Configuration::get('LISTING_LIVE_MODE', true),
-            'LISTING_ACCOUNT_EMAIL' => Configuration::get('LISTING_ACCOUNT_EMAIL', 'contact@prestashop.com'),
-            'LISTING_ACCOUNT_PASSWORD' => Configuration::get('LISTING_ACCOUNT_PASSWORD', null),
         );
     }
 
