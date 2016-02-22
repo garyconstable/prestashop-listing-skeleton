@@ -90,6 +90,14 @@ class AdminListingController extends AdminController
                 'align' => 'left',
                 'name'  => 'title'
             ),
+            'active' => array(
+                'title'  => $this->l('Active'), 
+                'align'  => 'center', 
+                'active' => 'status',
+		'type'   => 'bool', 
+                'class' => 'fixed-width-sm',
+                'name'  => 'active'
+            ),
             'position' => array(
                 'title' => $this->l('Position'),
                 'filter_key' => 'a!position',
