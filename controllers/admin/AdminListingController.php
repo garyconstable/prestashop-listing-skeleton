@@ -224,6 +224,27 @@ class AdminListingController extends AdminController
                     'autoload_rte' => true,
                 )
             ),
+            
+            array(
+	            'type' => 'switch',
+	            'label' => $this->l('Active'),
+	            'name' => 'active',
+	            'required' => false,
+	            'is_bool' => true,
+	            'values' => array(
+	                array(
+	                    'id' => 'active_on',
+	                    'value' => 1,
+	                    'label' => $this->l('Yes')
+	                ),
+	                array(
+	                    'id' => 'active_off',
+	                    'value' => 0,
+	                    'label' => $this->l('No')
+	                )
+	            ),
+                ),
+            
             'submit' => array(
                 'title' => $this->l('Save')
             )
@@ -232,13 +253,13 @@ class AdminListingController extends AdminController
         
         if (Shop::isFeatureActive()) 
         {
-			$this->fields_form['input'][] = array(
-                'type' => 'shop',
-                'label' => $this->l('Shop association'),
-                'name' => 'checkBoxShopAsso',
-                //'values' => Shop::getTree()
-            );
-		}
+		$this->fields_form['input'][] = array(
+	                'type' => 'shop',
+	                'label' => $this->l('Shop association'),
+	                'name' => 'checkBoxShopAsso',
+	                //'values' => Shop::getTree()
+            	);
+	}
 
         return parent::renderForm(); 
     }
