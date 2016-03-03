@@ -223,9 +223,27 @@ class AdminListingController extends AdminController
                     'class' => 'rte',
                     'autoload_rte' => true,
                 )
-            ),
-            
-            array(
+                /*
+                array(
+			'type' => 'swap',
+			'label' => $this->l('Carriers'),
+			'name' => 'ids_carriers',
+			'required' => false,
+			'multiple' => true,
+			'options' => array(
+				'query' => Carrier::getCarriers($this->context->language->id, false, false, false, null, Carrier::ALL_CARRIERS),
+				'id' => 'id_reference',
+				'name' => 'name'
+			),
+			'hint' => array(
+				$this->l('Associated carriers.'),
+				$this->l('If you do not select any carrier, none will be able to ship from this warehouse.'),
+				$this->l('You can specify the number of carriers available to ship orders from particular warehouses.'),
+			),
+			'desc' => $this->l('You must select at least one carrier to enable shipping from this warehouse. Use CTRL+Click to select more than one carrier.'),
+		),
+                */
+                array(
 	            'type' => 'switch',
 	            'label' => $this->l('Active'),
 	            'name' => 'active',
@@ -244,6 +262,7 @@ class AdminListingController extends AdminController
 	                )
 	            ),
                 ),
+            ),
             
             'submit' => array(
                 'title' => $this->l('Save')
